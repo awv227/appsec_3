@@ -1,0 +1,32 @@
+    {% extends "layout.html" %}
+   
+    {% block content %}
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form name="spell_check" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ form.hidden_tag() }}
+
+                    <p>
+                        {{ form.inputtext.label }}<br>
+                        {{ form.inputtext(size=100) }}
+                        {% for error in form.inputtext.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                    </p>
+
+                    <p>
+                        {{ form.check_spelling() }}
+                    </p>
+                
+                <span ><cc class="correct">Correctly Spelled Words: {{ textout }}</span> </cc>
+                <br>
+                <span ><ic class="incorrect">Incorrectly Spelled Words: {{ misspelled }}</span> </ic>
+                
+                </fieldset>
+            </form>
+        </div>
+    </div>
+ {% endblock %}

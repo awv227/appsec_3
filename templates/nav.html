@@ -1,0 +1,20 @@
+    <header>
+        <nav>
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a href="{{ url_for('register') }}" class="nav-link {% if register %}active{% endif %}">Register</a></li>
+                <li class="nav-item"><a href="{{ url_for('login') }}" class="nav-link {% if login %}active{% endif %}">Login</a></li>
+
+                {% if logged_in %}
+                <li class="nav-item"><a href="{{ url_for('spell_check') }}" class="nav-link {% if spell_check %}active{% endif %}">Spell Check</a></li> 
+                <li class="nav-item"><a href="{{ url_for('history') }}" class="nav-link {% if history %}active{% endif %}">History</a></li>
+                <li class="nav-item"><a href="{{ url_for('query') }}" class="nav-link {% if query %}active{% endif %}">Query Review</a></li>  
+                <li class="nav-item"><a href="{{ url_for('logout') }}" class="nav-link {% if logout %}active{% endif %}">Logout</a></li>
+                {% endif %}
+
+                {% if user_logged_in == '1' %}
+                <li class="nav-item"><a href="{{ url_for('login_history') }}" class="nav-link {% if login_history %}active{% endif %}">Login History</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <hr style="clear:both">
+    </header>

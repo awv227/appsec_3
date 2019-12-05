@@ -1,0 +1,41 @@
+    {% extends "layout.html" %}
+   
+    {% block content %}
+
+<h1>{{ title }} </h1>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+
+            {% if not queries %}
+                <h1>You have not submitted any queries.</h1>
+            {% else %}
+                <h1>Your submitted query:</h1>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Query ID</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Query Text</th>
+                        <th scope="col">Query Results</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <!-- Construct the rest of queries here -->
+                    {% for query in queries %}
+                        <td scope='row'>{{ query.r2["query_ID"] }}</td>
+                        <td>{{ query.r2["username"] }}</td>
+                        <td>{{ query.r2["querytext"] }}</td>
+                        <td>{{ query.r2["queryresults"] }}</td>                      
+                    </tr>
+                    {% endfor %}
+                    
+                    </tbody>
+                </table>
+                {% endif %}
+        </div>
+    </div>
+    
+ {% endblock %}

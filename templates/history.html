@@ -1,0 +1,64 @@
+    {% extends "layout.html" %}
+   
+    {% block content %}
+
+<h1>{{ title }} </h1>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <form name="query" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ form.hidden_tag() }}
+
+                    {% if user_logged_in == '1' %}
+                        <p>
+                            {{ form.userquery.label }}<br>
+                            {{ form.userquery(size=15) }}
+                        </p>
+                        <p>
+                            {{ form.userquery_submit() }}
+                        </p>
+                    {% endif %}
+
+                    <p>
+                        {{ form.query_review.label }}<br>
+                        {{ form.query_review(size=15) }}
+                    </p>
+                    <p>
+                        {{ form.queryreview_submit() }}
+                    </p>
+
+            {% if not queries %}
+                <h1>You have not submitted any queries.</h1>
+            {% else %}
+                <h1>Your number of queries submitted: {{numqueries}}</h1>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Query ID</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Query Text</th>
+                        <th scope="col">Query Results</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <!-- Construct the rest of queries here -->
+                    {% for query in queries %}
+                    <tr class='clickable-row' data-href="{{ url_for('query_review') }}" method = POST> 
+                        <td scope='row'>{{ query["query_ID"] }}</td>
+                        <td>{{ query["username"] }}</td>
+                        <td>{{ query["querytext"] }}</td>
+                        <td>{{ query["queryresults"] }}</td>                      
+                    </tr>
+                    {% endfor %}
+                    
+                    </tbody>
+                </table>
+                {% endif %}
+        </div>
+    </div>
+    
+ {% endblock %}

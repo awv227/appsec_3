@@ -1,0 +1,48 @@
+    {% extends "layout.html" %}
+   
+    {% block content %}
+
+<h1>{{ title }} </h1>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <form name="login_history" action="" method="post" novalidate>
+                <fieldset class="form-group">
+                    <legend>{{title}}</legend> 
+                    {{ form.hidden_tag() }}
+
+                    {% if user_logged_in == '1' %}
+                        <p>
+                            {{ form.userquery.label }}<br>
+                            {{ form.userquery(size=15) }}
+                        </p>
+                        <p>
+                            {{ form.userquery_submit() }}
+                        </p>
+                    {% endif %}
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">User ID</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <!-- Construct the rest of queries here -->
+                    {% for user in users %}
+                        <td scope='row'>{{ user["user_ID"] }}</td>
+                        <td>{{ query["action_time"] }}</td>
+                        <td>{{ query["action_time"] }}</td>                     
+                    </tr>
+                    {% endfor %}
+                    
+                    </tbody>
+                </table>
+                
+        </div>
+    </div>
+    
+ {% endblock %}
