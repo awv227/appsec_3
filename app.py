@@ -75,8 +75,6 @@ class User(BASE):
     ID_2fa = Column(String(64), nullable=False)
     pw_salt = Column(String(16), nullable=False)
     mfa_salt = Column(String(16), nullable=False)
-    #log_ID = Column(Integer, ForeignKey('log_records.log_ID'))
-    #query_ID= Column(Integer, ForeignKey('query_records.query_ID'))
     child_logs = relationship('Log_Record')
     child_queries = relationship('Query_Record')
 
@@ -96,11 +94,8 @@ class Log_Record(BASE):
     user_ID = Column(Integer, ForeignKey('users.user_ID'), nullable=False)
 
     def __init__(self, user_ID, action_type):  
-        #self.log_ID = user_ID
         self.user_ID = user_ID
         self.action_type = action_type
-        #self.action_time = action_time
-        #self.user = user
 
 class Query_Record(BASE):
     __tablename__ = 'query_records'
@@ -111,30 +106,20 @@ class Query_Record(BASE):
     username = Column(Integer, ForeignKey('users.user_ID'), nullable=False)
 
     def __init__(self, user_ID, text_submitted, results_received):  
-        #self.query_ID = query_ID
         self.user_ID = user_ID
         self.text_submitted = text_submitted
         self.results_received = results_received
-        #self.action_time = action_time
-        #self.user = user
-
-# Clean-up prior work
-# REMOVE BEFORE SUBMITTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! <-----Important
-BASE.metadata.drop_all(engine)
 
 # Create DB again
 BASE.metadata.create_all(engine)
-#DBSessionMaker = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 DBSessionMaker = sessionmaker(bind=engine)
 
 session = DBSessionMaker()
 
 # Create Admin
 admin_uname = "admin"
-#admin_pword = "Administrator@1"
-#admin_ID_2fa = "12345678901"
-admin_pword = "admin"
-admin_ID_2fa = "admin"
+admin_pword = "Administrator@1"
+admin_ID_2fa = "12345678901"
 pw_hasher = SHA512()
 mfa_hasher = SHA256()
 # SALT PW
@@ -156,15 +141,6 @@ session.commit()
 
 # Get just added admin's user_ID
 just_added_admin = session.query(User).filter(User.uname == "admin").first()
-
-# REMOVE BEFORE SUBMITTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! <--------IMPORTANT
-print("ID: ", just_added_admin.user_ID, " uname: ", admin_user.uname, " pword: ", admin_user.pword, " MFA: ", admin_user.ID_2fa, " pw_salt: ", admin_user.pw_salt, " mfa_salt ", admin_user.mfa_salt)
-
-
-user_data = session.query(User).all()
-for i in user_data:
-    print("admin create: ", i.user_ID, i.uname)
-
 session.close()
 
 
@@ -223,14 +199,6 @@ def register():
             session.add(new_log)
             session.commit()
 
-            # REMOVE BEFORE SUBMITTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! <--------IMPORTANT
-            print("ID: ", new_user.user_ID, " uname: ", new_user.uname, " pword: ", new_user.pword, " MFA: ", new_user.ID_2fa, " pw_salt: ", new_user.pw_salt, " mfa_salt ", new_user.mfa_salt)
-            print("log: ", new_log.log_ID, " user_ID: ", new_log.user_ID, " action: ", new_log.action_type, " time: ", new_log.action_time)
-
-            user_data = session.query(User).all()
-            for i in user_data:
-                print("register: ", i.user_ID, i.uname)
-
             # Return success
             success = "succcess"
 
@@ -261,10 +229,6 @@ def login():
 
         global DBSessionMaker
         session = DBSessionMaker()
-
-        user_data = session.query(User).all()
-        for i in user_data:
-            print("login: ", i.user_ID, i.uname)
 
         uname = form.uname.data
         ID_2fa = form.ID_2fa.data
@@ -312,11 +276,6 @@ def login():
 
             result = "Success"
 
-            # REMOVE BEFORE SUBMITTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! <--------IMPORTANT
-            just_added_log = session.query(Log_Record).filter(Log_Record.user_ID == user_record.user_ID).all()
-            for j in just_added_log:
-                print("log: ", j.log_ID, " user_ID: ", j.user_ID, " action: ", j.action_type, " time: ", j.action_time)
-
         elif unameSuccess == "false":
             result = "incorrect"
         elif pwordSuccess == "false":
@@ -344,9 +303,6 @@ def logout():
     
     # Create log record of login
     log_record = Log_Record(user_id=user_logged_in, action_type="logout", logged_in=logged_in)
-
-    # REMOVE BEFORE SUBMITTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! <--------IMPORTANT
-    print(log_record)
 
     # Add log record to DB
     session.add(log_record)
@@ -392,9 +348,6 @@ def spell_check():
     
         # Create log record of query
         query_record = Query_Record(username=uname, querytext=inputtext, queryresults=misspelled)
-
-        # REMOVE BEFORE SUBMITTING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! <--------IMPORTANT
-        print(query_record)
 
         # Add query record to DB
         session.add(query_record)
